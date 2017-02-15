@@ -17,9 +17,25 @@ namespace Utviklerforum
 			Assert.That(someClass, Is.Not.Null);
 		}
 
+		public void Explicit_Registration_ByInterface()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<ISomeClass>().ImplementedBy<SomeClass>());
+
+			var someClass = container.Resolve<ISomeClass>();
+
+			Assert.That(someClass, Is.Not.Null);
+		}
+
 	}
 
-	public class SomeClass
+	public interface ISomeClass
 	{
 	}
+
+	public class SomeClass : ISomeClass
+	{
+	}
+
 }
