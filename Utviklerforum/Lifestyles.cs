@@ -68,6 +68,18 @@ namespace Utviklerforum
 			Assert.That(!container.Kernel.ReleasePolicy.HasTrack(someClass));
 		}
 
+		public void Transient_Lifestyle_DoesNotTrackInstancePopQuiz()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<SomeDisposableClass>().LifeStyle.Transient);
+			container.Register(Component.For<AClassWithDiposableDependency>().LifeStyle.Transient);
+
+			var someClass = container.Resolve<AClassWithDiposableDependency>();
+
+			Assert.That(!container.Kernel.ReleasePolicy.HasTrack(someClass));
+		}
+
 		public void Scoped_Lifestyle()
 		{
 			var container = new WindsorContainer();
@@ -104,6 +116,16 @@ namespace Utviklerforum
 
 		public class SomeClass
 		{
+		}
+
+		public class AClassWithDiposableDependency
+		{
+			private SomeDisposableClass _dependency;
+
+			public AClassWithDiposableDependency(SomeDisposableClass dependency)
+			{
+				_dependency = dependency;
+			}
 		}
 
 		public class SomeDisposableClass : IDisposable
