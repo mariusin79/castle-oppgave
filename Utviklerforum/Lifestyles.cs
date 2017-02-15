@@ -18,6 +18,18 @@ namespace Utviklerforum
 			Assert.That(someClass, Is.SameAs(someClass2));
 		}
 
+		public void Transient_Lifestyle()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<SomeClass>().LifeStyle.Transient);
+
+			var someClass = container.Resolve<SomeClass>();
+			var someClass2 = container.Resolve<SomeClass>();
+
+			Assert.That(someClass, Is.Not.SameAs(someClass2));
+		}
+
 		public class SomeClass
 		{
 		}
