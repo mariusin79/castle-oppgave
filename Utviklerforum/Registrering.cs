@@ -52,20 +52,21 @@ namespace Utviklerforum
 			Assert.That(someClass, Is.InstanceOf<SomeClass2>());
 		}
 
+		public interface ISomeClass
+		{
+		}
+
+		public interface ISomeClass2
+		{
+		}
+
+		public class SomeClass : ISomeClass, ISomeClass2
+		{
+		}
+
+		public class SomeClass2 : ISomeClass { }
+
 	}
 
-	public interface ISomeClass
-	{
-	}
-
-	public interface ISomeClass2
-	{
-	}
-
-	public class SomeClass : ISomeClass, ISomeClass2
-	{
-	}
-
-	public class SomeClass2 : ISomeClass { }
 
 }
