@@ -28,13 +28,29 @@ namespace Utviklerforum
 			Assert.That(someClass, Is.Not.Null);
 		}
 
+		public void Explicit_Registration_Forwarded()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<ISomeClass, ISomeClass2>().ImplementedBy<SomeClass>());
+
+			var someClass = container.Resolve<ISomeClass>();
+			var someClass2 = container.Resolve<ISomeClass2>();
+
+			Assert.That(someClass, Is.SameAs(someClass2));
+		}
+
 	}
 
 	public interface ISomeClass
 	{
 	}
 
-	public class SomeClass : ISomeClass
+	public interface ISomeClass2
+	{
+	}
+
+	public class SomeClass : ISomeClass, ISomeClass2
 	{
 	}
 
