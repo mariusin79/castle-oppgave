@@ -19,10 +19,24 @@ namespace Utviklerforum
 			Assert.That(instance.Dependency, Is.Not.Null);
 		}
 
+		public void Optional_Dependencies()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<SomeDependency>());
+			container.Register(Component.For<AnotherDependency>());
+			container.Register(Component.For<SomeClass>());
+
+			var instance = container.Resolve<SomeClass>();
+
+			Assert.That(instance.OptionalDependency, Is.Not.Null);
+		}
 
 		public class SomeClass
 		{
 			public SomeDependency Dependency { get; }
+
+			public AnotherDependency OptionalDependency { get; set; }
 
 			public SomeClass(SomeDependency dependency)
 			{
@@ -33,6 +47,11 @@ namespace Utviklerforum
 		public class SomeDependency
 		{
 
+		}
+
+		public class AnotherDependency
+		{
+			
 		}
 	}
 }
