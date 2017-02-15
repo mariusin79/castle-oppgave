@@ -40,6 +40,18 @@ namespace Utviklerforum
 			Assert.That(someClass, Is.SameAs(someClass2));
 		}
 
+		public void Explicit_Registration_Default()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<ISomeClass>().ImplementedBy<SomeClass>());
+			container.Register(Component.For<ISomeClass>().ImplementedBy<SomeClass2>().IsDefault());
+
+			var someClass = container.Resolve<ISomeClass>();
+
+			Assert.That(someClass, Is.InstanceOf<SomeClass2>());
+		}
+
 	}
 
 	public interface ISomeClass
@@ -53,5 +65,7 @@ namespace Utviklerforum
 	public class SomeClass : ISomeClass, ISomeClass2
 	{
 	}
+
+	public class SomeClass2 : ISomeClass { }
 
 }
