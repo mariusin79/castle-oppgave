@@ -1,4 +1,6 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System;
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using NUnit.Framework;
 
@@ -30,6 +32,19 @@ namespace Utviklerforum
 			var instance = container.Resolve<SomeClass>();
 
 			Assert.That(instance.OptionalDependency, Is.Not.Null);
+		}
+
+		public void Delegate_Based_Factory()
+		{
+			var container = new WindsorContainer();
+
+			container.AddFacility<TypedFactoryFacility>();
+
+			container.Register(Component.For<SomeDependency>());
+
+			var factory =  container.Resolve<Func<SomeDependency>>();
+
+			Assert.That(factory, Is.Not.Null);
 		}
 
 		public class SomeClass
