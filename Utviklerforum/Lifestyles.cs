@@ -34,6 +34,40 @@ namespace Utviklerforum
 			Assert.That(someClass, Is.Not.SameAs(someClass2));
 		}
 
+		public void Transient_Lifestyle_DoesNotTrackInstance()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<SomeClass>().LifeStyle.Transient);
+
+			var someClass = container.Resolve<SomeClass>();
+
+			Assert.That(!container.Kernel.ReleasePolicy.HasTrack(someClass));
+		}
+
+		public void Transient_Lifestyle_TracksIDisposable()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<SomeDisposableClass>().LifeStyle.Transient);
+
+			var someClass = container.Resolve<SomeDisposableClass>();
+
+			Assert.That(container.Kernel.ReleasePolicy.HasTrack(someClass));
+		}
+
+		public void Transient_Lifestyle_ReleasesTrackOfIDisposable()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<SomeDisposableClass>().LifeStyle.Transient);
+
+			var someClass = container.Resolve<SomeDisposableClass>();
+			container.Release(someClass);
+
+			Assert.That(!container.Kernel.ReleasePolicy.HasTrack(someClass));
+		}
+
 		public void Scoped_Lifestyle()
 		{
 			var container = new WindsorContainer();
@@ -70,6 +104,13 @@ namespace Utviklerforum
 
 		public class SomeClass
 		{
+		}
+
+		public class SomeDisposableClass : IDisposable
+		{
+			public void Dispose()
+			{
+			}
 		}
 
 	}
