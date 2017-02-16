@@ -63,7 +63,7 @@ namespace Utviklerforum
 			Assert.That(instance, Is.Not.Null);
 		}
 
-		public void Interface_Based_Factory_Disposed()
+		public void Interface_Based_Factory_DisposesResource()
 		{
 			var container = new WindsorContainer();
 
