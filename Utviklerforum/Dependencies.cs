@@ -80,6 +80,30 @@ namespace Utviklerforum
 			Assert.That(instance.Disposed);
 		}
 
+		public void Service_Location_Anti_Pattern()
+		{
+			var container = new WindsorContainer();
+
+			container.Register(Component.For<IWindsorContainer>().Instance(container));
+			container.Register(Component.For<Service>());
+			container.Register(Component.For<ServiceLocatorAntiPattern>());
+
+			var aClassUsingTheContainer = container.Resolve<ServiceLocatorAntiPattern>();
+
+			Assert.That(aClassUsingTheContainer, Is.Not.Null);
+		}
+
+		public class ServiceLocatorAntiPattern
+		{
+			private Service _someClass;
+
+			public ServiceLocatorAntiPattern(IWindsorContainer container)
+			{
+				_someClass = container.Resolve<Service>();
+			}
+
+		}
+
 		public interface ISomeFactory
 		{
 			Service Create();
