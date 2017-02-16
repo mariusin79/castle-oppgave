@@ -47,6 +47,55 @@ namespace Utviklerforum
 			Assert.That(factory, Is.Not.Null);
 		}
 
+		public void Interface_Based_Factory()
+		{
+			var container = new WindsorContainer();
+
+			container.AddFacility<TypedFactoryFacility>();
+
+			container.Register(Component.For<Service>());
+			container.Register(Component.For<ISomeFactory>().AsFactory());
+
+			var factory = container.Resolve<ISomeFactory>();
+
+			var instance = factory.Create();
+
+			Assert.That(instance, Is.Not.Null);
+		}
+
+		public void Interface_Based_Factory_Disposed()
+		{
+			var container = new WindsorContainer();
+
+			container.AddFacility<TypedFactoryFacility>();
+
+			container.Register(Component.For<Service>().LifestyleTransient());
+			container.Register(Component.For<ISomeFactory>().AsFactory());
+
+			var factory = container.Resolve<ISomeFactory>();
+
+			var instance = factory.Create();
+			factory.DupiDup(instance);
+
+			Assert.That(instance.Disposed);
+		}
+
+		public interface ISomeFactory
+		{
+			Service Create();
+			void DupiDup(Service instance);
+		}
+
+		public class Service : IDisposable
+		{
+			public void Dispose()
+			{
+				Disposed = true;
+			}
+
+			public bool Disposed { get; set; }
+		}
+
 		public class SomeClass
 		{
 			public SomeDependency Dependency { get; }
