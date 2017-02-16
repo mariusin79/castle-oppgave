@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Aop.cs" />
     <Compile Include="Dependencies.cs" />
+    <Compile Include="Installers.cs" />
     <Compile Include="KonvensjonsbasertRegistrering.cs" />
     <Compile Include="Lifestyles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
